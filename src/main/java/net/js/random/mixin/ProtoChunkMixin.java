@@ -1,0 +1,21 @@
+package net.js.random.mixin;
+
+import net.js.random.RandomizationEvents;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ProtoChunk;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
+@Mixin(ProtoChunk.class)
+public abstract class ProtoChunkMixin {
+    @ModifyVariable(
+            method = "setBlockState(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Lnet/minecraft/world/level/block/state/BlockState;",
+            at = @At("HEAD"),
+            argsOnly = true,
+            ordinal = 0
+    )
+    private BlockState random$replaceGeneratedBlock(BlockState state) {
+        return RandomizationEvents.randomizeGeneratedBlock(state);
+    }
+}
